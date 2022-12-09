@@ -22,6 +22,14 @@ public class Layer {
     for (int j = 0; j < i; j++) {
       this.sections.add(new Section(i));
     }
-
   }
+
+  public Layer(Layer that) {
+    this.id = UUID.randomUUID().toString();
+    this.name = that.name;
+    this.description = that.description;
+    this.sections = new ArrayList<Section>();
+    that.sections.forEach(thatS -> this.sections.add(new Section(thatS)));
+  }
+
 }

@@ -21,4 +21,12 @@ public class Section {
       this.components.add(new Component());
     }
   }
+
+  public Section(Section that) {
+    this.id = UUID.randomUUID().toString();
+    this.name = that.name;
+    this.description = that.description;
+    this.components = new ArrayList<Component>();
+    that.components.forEach(thatC -> this.components.add(new Component(thatC)));
+  }
 }

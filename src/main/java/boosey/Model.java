@@ -23,4 +23,11 @@ public class Model extends ReactivePanacheMongoEntity {
     }
   }
 
+  public Model(Model that) {
+    this.name = that.name;
+    this.description = that.description;
+    this.layers = new ArrayList<Layer>();
+    that.layers.forEach((thatL) -> this.layers.add(new Layer(thatL)));
+  }
+
 }
