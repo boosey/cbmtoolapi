@@ -30,4 +30,30 @@ public class Model extends ReactivePanacheMongoEntity {
     that.layers.forEach((thatL) -> this.layers.add(new Layer(thatL)));
   }
 
+  public Model addLayer() {
+    this.layers.add(new Layer());
+    return this;
+  }
+
+  public Model addSection(String layerId) {
+    this.layers.stream()
+        .filter(l -> l.id == layerId)
+        .findFirst()
+        .ifPresent(l -> l.sections.add(new Section(0)));
+    ;
+    return this;
+  }
+
+  public Model addComponent(String layerId, String sectionId) {
+    this.layers.stream()
+        .filter(l -> l.id == layerId)
+        .findFirst()
+        .ifPresent(l -> l.sections.stream()
+            .filter(s -> s.id == sectionId)
+            .findFirst()
+            .ifPresent(s -> s.components.add(new Component())));
+
+    return this;
+  }
+
 }

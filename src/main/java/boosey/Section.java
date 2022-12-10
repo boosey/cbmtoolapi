@@ -29,4 +29,5 @@ public class Section {
     this.components = new ArrayList<Component>();
     that.components.forEach(thatC -> this.components.add(new Component(thatC)));
   }
+
 }
