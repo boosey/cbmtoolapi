@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -51,10 +52,28 @@ class ModelsResource {
     return Model.persist(new Model(1));
   }
 
+  @PUT
+  @Path("/{modelId}")
+  public Uni<Model> updateModel(String modelId, Model model) {
+    return Model.<Model>findById(new ObjectId(modelId))
+        .onItem().transform(m -> new Model(modelId, model))
+        .onItem().transform(newM -> newM.<Model>update())
+        .onItem().transformToUni(newM -> newM);
+  }
+
   @DELETE
   @Path("/{modelId}")
   public Uni<Boolean> deleteModel(String modelId) {
     return Model.deleteById(new ObjectId(modelId));
+  }
+
+  @POST
+  @Path("/{modelId}/layers/{layerId}/{sections}")
+  public Uni<Model> createSection(String modelId, String layerId) {
+    return Model.<Model>findById(new ObjectId(modelId))
+        .onItem().invoke(m -> m.addSection(layerId))
+        .onItem().transform(m -> m.<Model>update())
+        .onItem().transformToUni(m -> m);
   }
 
   @POST
@@ -67,16 +86,7 @@ class ModelsResource {
   }
 
   @POST
-  @Path("/{modelId}/layers/{layerId}/sections}")
-  public Uni<Model> createSection(String modelId, String layerId) {
-    return Model.<Model>findById(new ObjectId(modelId))
-        .onItem().invoke(m -> m.addSection(layerId))
-        .onItem().transform(m -> m.<Model>update())
-        .onItem().transformToUni(m -> m);
-  }
-
-  @POST
-  @Path("/{modelId}/layers/{layerId}/sections/{sectionId}}")
+  @Path("/{modelId}/layers/{layerId}/sections/{sectionId}/components")
   public Uni<Model> createComponent(String modelId, String layerId, String sectionId) {
     return Model.<Model>findById(new ObjectId(modelId))
         .onItem().invoke(m -> m.addComponent(layerId, sectionId))

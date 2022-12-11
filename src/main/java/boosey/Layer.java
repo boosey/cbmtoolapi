@@ -32,4 +32,12 @@ public class Layer {
     that.sections.forEach(thatS -> this.sections.add(new Section(thatS)));
   }
 
+  public Layer(String layerId, Layer that) {
+    this.id = layerId;
+    this.name = that.name;
+    this.description = that.description;
+    this.sections = new ArrayList<Section>();
+    that.sections.forEach(thatS -> this.sections.add(new Section(thatS.id, thatS)));
+  }
+
 }

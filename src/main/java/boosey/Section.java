@@ -30,4 +30,12 @@ public class Section {
     that.components.forEach(thatC -> this.components.add(new Component(thatC)));
   }
 
+  public Section(String sectionId, Section that) {
+    this.id = sectionId;
+    this.name = that.name;
+    this.description = that.description;
+    this.components = new ArrayList<Component>();
+    that.components.forEach(thatC -> this.components.add(new Component(thatC.id, thatC)));
+  }
+
 }

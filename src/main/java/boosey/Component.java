@@ -19,4 +19,10 @@ public class Component {
     this.name = that.name;
     this.description = that.description;
   }
+
+  public Component(String componentId, Component that) {
+    this.id = componentId;
+    this.name = that.name;
+    this.description = that.description;
+  }
 }
