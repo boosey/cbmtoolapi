@@ -1,0 +1,8 @@
+#### Build image and place in local Docker
+./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true
+
+#### Tag
+docker tag boosey/cbmtoolapi:1.0.0-SNAPSHOT  boosey/cbmtoolapi:2.0
+
+#### Push
+docker push boosey/cbmtoolapi:2.0     
