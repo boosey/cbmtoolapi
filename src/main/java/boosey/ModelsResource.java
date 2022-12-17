@@ -1,6 +1,7 @@
 package boosey;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.Consumes;
@@ -87,6 +88,37 @@ class ModelsResource {
         .onItem().invoke(m -> m.addComponent(layerId, sectionId))
         .onItem().transform(m -> m.<Model>update())
         .onItem().transformToUni(m -> m);
+  }
+
+  @GET
+  @Path("/tags")
+  public Uni<Set<String>> getTags() {
+
+    return Tags.<Tags>listAll()
+        .onItem().transform((t) -> t.size() > 0 ? t.get(0) : new Tags())
+        .onItem().transform((t) -> t.options);
+  }
+
+  @POST
+  @Path("/tags")
+  @Consumes(MediaType.TEXT_PLAIN)
+  public Uni<Void> addTag(String newOption) {
+
+    return Tags.<Tags>listAll()
+        .onItem().transform((t) -> t.size() > 0 ? t.get(0) : new Tags())
+        .onItem().invoke((t) -> t.add(newOption))
+        .onItem().transformToUni((t) -> Tags.persistOrUpdate(t));
+  }
+
+  @DELETE
+  @Path("/tags/{tag}")
+  public Uni<Void> deleteTag(String tag) {
+
+    return Tags.<Tags>listAll()
+        .onItem().transform((t) -> t.size() > 0 ? t.get(0) : new Tags())
+        .onItem().invoke((t) -> t.delete(tag))
+        .onItem().transformToUni((t) -> Tags.persistOrUpdate(t));
+
   }
 
 }
