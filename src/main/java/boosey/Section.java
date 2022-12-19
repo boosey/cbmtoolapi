@@ -38,4 +38,11 @@ public class Section {
     that.components.forEach(thatC -> this.components.add(new Component(thatC.id, thatC)));
   }
 
+  public void deleteComponent(String cid) {
+    if (components.size() > 1) {
+      components.removeIf(c -> c.id.equalsIgnoreCase(cid));
+    }
+
+  }
+
 }

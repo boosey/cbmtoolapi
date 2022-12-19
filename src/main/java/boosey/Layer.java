@@ -40,4 +40,17 @@ public class Layer {
     that.sections.forEach(thatS -> this.sections.add(new Section(thatS.id, thatS)));
   }
 
+  public void deleteSection(String sid) {
+    if (sections.size() > 1) {
+      sections.removeIf(s -> s.id.equalsIgnoreCase(sid));
+    }
+
+  }
+
+  public void deleteComponent(String sid, String cid) {
+    sections.stream()
+        .filter(s -> s.id.equalsIgnoreCase(sid)).findFirst()
+        .ifPresent(s -> s.deleteComponent(cid));
+  }
+
 }

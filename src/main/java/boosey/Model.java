@@ -1,9 +1,7 @@
 package boosey;
 
 import java.util.ArrayList;
-
 import org.bson.types.ObjectId;
-
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import io.quarkus.mongodb.panache.reactive.ReactivePanacheMongoEntity;
 
@@ -43,8 +41,38 @@ public class Model extends ReactivePanacheMongoEntity {
   }
 
   public Model addLayer() {
-    this.layers.add(new Layer(1));
+    this.layers.add(0, new Layer(1));
     return this;
+  }
+
+  public String deleteLayer(String lid) {
+    if (layers.size() > 1) {
+      layers.removeIf(l -> isTheId(l.id, lid));
+      return "1";
+    }
+
+    return "0";
+  }
+
+  public String deleteSection(String lid, String sid) {
+    layers.stream()
+        .filter(l -> l.id.equalsIgnoreCase(lid)).findFirst()
+        .ifPresent(l -> l.deleteSection(sid));
+
+    return "1";
+  }
+
+  public String deleteComponent(String lid, String sid, String cid) {
+    layers.stream()
+        .filter(l -> l.id.equalsIgnoreCase(lid)).findFirst()
+        .ifPresent(l -> l.deleteComponent(sid, cid));
+
+    return "1";
+  }
+
+  private boolean isTheId(String id1, String id2) {
+    var b = id1.equalsIgnoreCase(id2);
+    return b;
   }
 
   public Model addSection(String layerId) {

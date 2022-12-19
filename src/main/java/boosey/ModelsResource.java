@@ -14,7 +14,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.bson.types.ObjectId;
 import org.jboss.resteasy.reactive.RestQuery;
-
 import io.smallrye.mutiny.Uni;
 
 @Path("models")
@@ -61,6 +60,36 @@ class ModelsResource {
   @Path("/{modelId}")
   public Uni<Boolean> deleteModel(String modelId) {
     return Model.deleteById(new ObjectId(modelId));
+  }
+
+  @DELETE
+  @Path("/{modelId}/layers/{layerId}")
+  public Uni<Model> deleteLayer(String modelId, String layerId) {
+
+    return Model.<Model>findById(new ObjectId(modelId))
+        .onItem().invoke(m -> m.deleteLayer(layerId))
+        .onItem().transform(m -> m.<Model>update())
+        .onItem().transformToUni(m -> m);
+  }
+
+  @DELETE
+  @Path("/{modelId}/layers/{layerId}/sections/{sectionId}")
+  public Uni<Model> deleteSection(String modelId, String layerId, String sectionId) {
+
+    return Model.<Model>findById(new ObjectId(modelId))
+        .onItem().invoke(m -> m.deleteSection(layerId, sectionId))
+        .onItem().transform(m -> m.<Model>update())
+        .onItem().transformToUni(m -> m);
+  }
+
+  @DELETE
+  @Path("/{modelId}/layers/{layerId}/sections/{sectionId}/components/{componentId}")
+  public Uni<Model> deleteComponent(String modelId, String layerId, String sectionId, String componentId) {
+
+    return Model.<Model>findById(new ObjectId(modelId))
+        .onItem().invoke(m -> m.deleteComponent(layerId, sectionId, componentId))
+        .onItem().transform(m -> m.<Model>update())
+        .onItem().transformToUni(m -> m);
   }
 
   @POST
